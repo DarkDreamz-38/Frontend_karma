@@ -4,12 +4,12 @@ import { createEmployee } from "../api/employees"
 import { getRoles } from "../api/materials"
 import { getEmployeeCompetencies } from "../api/competencies"
 
-export default function Profile({ employee, employees, onSelectEmployee, onEmployeeCreated }) {
+export default function Profile({ employee, employees = [], onSelectEmployee, onEmployeeCreated }) {
   const [roles, setRoles] = useState([])
   const [competencies, setCompetencies] = useState([])
   const [loadingCompetencies, setLoadingCompetencies] = useState(false)
 
-  // New employee form
+  // New employee registration state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -68,44 +68,44 @@ export default function Profile({ employee, employees, onSelectEmployee, onEmplo
   }
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-          <User size={20} className="text-blue-600" />
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <User size={20} className="text-blue-600 sm:w-6 sm:h-6" />
           Employee Profile & Directory
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
           Manage your personal details, government credentials, and register new personnel.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: Active Profile Card */}
-        <div className="lg:col-span-1 space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        {/* Left: Active Profile Card & Switcher */}
+        <div className="lg:col-span-1 space-y-4 sm:space-y-6">
           {employee && (
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
-              <div className="w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-700 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-sm">
+            <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100 text-center">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-tr from-blue-600 to-indigo-700 text-white rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold mx-auto mb-3 sm:mb-4 shadow-sm">
                 {employee.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
               </div>
-              <h2 className="text-lg font-bold text-gray-900">{employee.name}</h2>
+              <h2 className="text-base sm:text-lg font-bold text-gray-900">{employee.name}</h2>
               <p className="text-xs text-blue-600 font-semibold mt-0.5">{employee.role}</p>
               <p className="text-xs text-gray-400 mt-0.5">{employee.department}</p>
 
-              <div className="mt-6 pt-6 border-t border-gray-100 text-left space-y-3">
-                <div className="flex items-center gap-3 text-sm text-gray-600">
-                  <Mail size={16} className="text-gray-400" />
+              <div className="mt-5 pt-5 border-t border-gray-100 text-left space-y-2.5">
+                <div className="flex items-center gap-2.5 text-xs sm:text-sm text-gray-600">
+                  <Mail size={15} className="text-gray-400 flex-shrink-0" />
                   <span className="truncate">{employee.email}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-600">
-                  <Briefcase size={16} className="text-gray-400" />
-                  <span>{employee.role}</span>
+                <div className="flex items-center gap-2.5 text-xs sm:text-sm text-gray-600">
+                  <Briefcase size={15} className="text-gray-400 flex-shrink-0" />
+                  <span className="truncate">{employee.role}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-600">
-                  <Building2 size={16} className="text-gray-400" />
-                  <span>{employee.department}</span>
+                <div className="flex items-center gap-2.5 text-xs sm:text-sm text-gray-600">
+                  <Building2 size={15} className="text-gray-400 flex-shrink-0" />
+                  <span className="truncate">{employee.department}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-600">
-                  <Clock size={16} className="text-gray-400" />
+                <div className="flex items-center gap-2.5 text-xs sm:text-sm text-gray-600">
+                  <Clock size={15} className="text-gray-400 flex-shrink-0" />
                   <span>{employee.experience} Years Experience</span>
                 </div>
               </div>
@@ -113,9 +113,9 @@ export default function Profile({ employee, employees, onSelectEmployee, onEmplo
           )}
 
           {/* Switch Employee Box */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-            <h3 className="font-semibold text-gray-900 text-sm mb-3">Switch Active User</h3>
-            <div className="space-y-1.5 max-h-60 overflow-y-auto">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100">
+            <h3 className="font-semibold text-gray-900 text-xs sm:text-sm mb-2.5">Switch Active Profile</h3>
+            <div className="space-y-1 max-h-52 overflow-y-auto">
               {employees.map(emp => (
                 <button
                   key={emp.id}
@@ -126,12 +126,12 @@ export default function Profile({ employee, employees, onSelectEmployee, onEmplo
                       : "hover:bg-gray-50 text-gray-700"
                   }`}
                 >
-                  <div className="truncate">
-                    <p className="font-medium">{emp.name}</p>
-                    <p className="text-gray-400 text-[10px]">{emp.role}</p>
+                  <div className="truncate pr-2">
+                    <p className="font-medium truncate">{emp.name}</p>
+                    <p className="text-gray-400 text-[10px] truncate">{emp.role}</p>
                   </div>
                   {emp.id === employee?.id && (
-                    <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                    <span className="w-2 h-2 rounded-full bg-blue-600 flex-shrink-0"></span>
                   )}
                 </button>
               ))}
@@ -140,24 +140,24 @@ export default function Profile({ employee, employees, onSelectEmployee, onEmplo
         </div>
 
         {/* Right: Competencies and New Registration Form */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
           {/* Active Competencies */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
+            <h3 className="font-semibold text-gray-900 text-sm sm:text-base mb-3 sm:mb-4 flex items-center gap-2">
               <Award size={18} className="text-blue-600" />
               Role Assigned Competencies
             </h3>
             {loadingCompetencies ? (
-              <p className="text-xs text-gray-400">Loading competencies...</p>
+              <p className="text-xs text-gray-400 py-4">Loading competencies...</p>
             ) : competencies.length === 0 ? (
-              <p className="text-xs text-gray-400">No competency records found for this role.</p>
+              <p className="text-xs text-gray-400 py-4">No competency records found for this role.</p>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                 {competencies.map((c, i) => (
-                  <div key={i} className="p-3.5 bg-gray-50 rounded-xl border border-gray-100">
-                    <p className="text-sm font-semibold text-gray-800">{c.competency.name}</p>
-                    <p className="text-xs text-gray-500 mt-1 line-clamp-2">{c.competency.description || "Core domain competency"}</p>
-                    <div className="mt-3 flex items-center justify-between text-xs text-gray-600">
+                  <div key={i} className="p-3 bg-gray-50 rounded-xl border border-gray-100">
+                    <p className="text-xs sm:text-sm font-semibold text-gray-800 truncate">{c.competency.name}</p>
+                    <p className="text-[11px] text-gray-500 mt-0.5 line-clamp-2">{c.competency.description || "Core domain competency"}</p>
+                    <div className="mt-2.5 flex items-center justify-between text-[11px] text-gray-600">
                       <span>Current: <strong>{(c.current_level * 10).toFixed(0)}</strong></span>
                       <span>Target: <strong>{(c.required_level * 10).toFixed(0)}</strong></span>
                     </div>
@@ -168,70 +168,70 @@ export default function Profile({ employee, employees, onSelectEmployee, onEmplo
           </div>
 
           {/* Register New Employee Form */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
+            <h3 className="font-semibold text-gray-900 text-sm sm:text-base mb-3 sm:mb-4 flex items-center gap-2">
               <PlusCircle size={18} className="text-green-600" />
               Register New Government Employee
             </h3>
 
             {formMessage && (
               <div className="mb-4 p-3 bg-green-50 text-green-700 rounded-xl text-xs flex items-center gap-2">
-                <CheckCircle size={16} />
+                <CheckCircle size={16} className="flex-shrink-0" />
                 <span>{formMessage}</span>
               </div>
             )}
 
             {formError && (
               <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-xl text-xs flex items-center gap-2">
-                <AlertCircle size={16} />
+                <AlertCircle size={16} className="flex-shrink-0" />
                 <span>{formError}</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Full Name</label>
+                  <label className="block text-[11px] sm:text-xs font-medium text-gray-700 mb-1">Full Name</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Priya Sharma"
                     value={formData.name}
                     onChange={e => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3.5 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Govt Email</label>
+                  <label className="block text-[11px] sm:text-xs font-medium text-gray-700 mb-1">Govt Email</label>
                   <input
                     type="email"
                     required
                     placeholder="e.g. priya.sharma@gov.in"
                     value={formData.email}
                     onChange={e => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3.5 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Department</label>
+                  <label className="block text-[11px] sm:text-xs font-medium text-gray-700 mb-1">Department</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. MoSPI, NITI Aayog"
                     value={formData.department}
                     onChange={e => setFormData({ ...formData, department: e.target.value })}
-                    className="w-full px-3.5 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Role / Designation</label>
+                  <label className="block text-[11px] sm:text-xs font-medium text-gray-700 mb-1">Role / Designation</label>
                   <select
                     value={formData.role}
                     onChange={e => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-3.5 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
                   >
                     {roles.length > 0 ? (
                       roles.map(r => (
@@ -248,7 +248,7 @@ export default function Profile({ employee, employees, onSelectEmployee, onEmplo
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Experience (Years)</label>
+                  <label className="block text-[11px] sm:text-xs font-medium text-gray-700 mb-1">Experience (Years)</label>
                   <input
                     type="number"
                     step="0.5"
@@ -256,7 +256,7 @@ export default function Profile({ employee, employees, onSelectEmployee, onEmplo
                     max="45"
                     value={formData.experience}
                     onChange={e => setFormData({ ...formData, experience: e.target.value })}
-                    className="w-full px-3.5 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                   />
                 </div>
               </div>
@@ -264,7 +264,7 @@ export default function Profile({ employee, employees, onSelectEmployee, onEmplo
               <button
                 type="submit"
                 disabled={formSubmitting}
-                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl text-sm font-semibold transition-colors"
+                className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl text-xs sm:text-sm font-semibold transition-colors shadow-sm"
               >
                 {formSubmitting ? "Registering..." : "Register Employee"}
               </button>
